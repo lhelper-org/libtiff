@@ -113,16 +113,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = fax2ps$(EXEEXT) fax2tiff$(EXEEXT) pal2rgb$(EXEEXT) \
-	ppm2tiff$(EXEEXT) raw2tiff$(EXEEXT) tiff2bw$(EXEEXT) \
-	tiff2pdf$(EXEEXT) tiff2ps$(EXEEXT) tiff2rgba$(EXEEXT) \
-	tiffcmp$(EXEEXT) tiffcp$(EXEEXT) tiffcrop$(EXEEXT) \
-	tiffdither$(EXEEXT) tiffdump$(EXEEXT) tiffinfo$(EXEEXT) \
-	tiffmedian$(EXEEXT) tiffset$(EXEEXT) tiffsplit$(EXEEXT) \
-	$(am__EXEEXT_1)
-@HAVE_OPENGL_TRUE@am__append_1 = tiffgt
-EXTRA_PROGRAMS = rgb2ycbcr$(EXEEXT) thumbnail$(EXEEXT)
-check_PROGRAMS = rgb2ycbcr$(EXEEXT) thumbnail$(EXEEXT)
+@TIFF_TOOLS_TRUE@bin_PROGRAMS = tiffcp$(EXEEXT) tiffdump$(EXEEXT) \
+@TIFF_TOOLS_TRUE@	tiffinfo$(EXEEXT) tiffset$(EXEEXT) \
+@TIFF_TOOLS_TRUE@	tiffsplit$(EXEEXT)
 subdir = tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/acinclude.m4 \
@@ -133,79 +126,27 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/libtiff/tif_config.h \
-	$(top_builddir)/libtiff/tiffconf.h
+CONFIG_HEADER = $(top_builddir)/config/config.h \
+	$(top_builddir)/libtiff/tif_config.h \
+	$(top_builddir)/libtiff/tiffconf.h \
+	$(top_builddir)/port/libport_config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-@HAVE_OPENGL_TRUE@am__EXEEXT_1 = tiffgt$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_fax2ps_OBJECTS = fax2ps.$(OBJEXT)
-fax2ps_OBJECTS = $(am_fax2ps_OBJECTS)
-fax2ps_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
+am_tiffcp_OBJECTS = tiffcp.$(OBJEXT)
+tiffcp_OBJECTS = $(am_tiffcp_OBJECTS)
+tiffcp_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-am_fax2tiff_OBJECTS = fax2tiff.$(OBJEXT)
-fax2tiff_OBJECTS = $(am_fax2tiff_OBJECTS)
-fax2tiff_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_pal2rgb_OBJECTS = pal2rgb.$(OBJEXT)
-pal2rgb_OBJECTS = $(am_pal2rgb_OBJECTS)
-pal2rgb_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_ppm2tiff_OBJECTS = ppm2tiff.$(OBJEXT)
-ppm2tiff_OBJECTS = $(am_ppm2tiff_OBJECTS)
-ppm2tiff_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_raw2tiff_OBJECTS = raw2tiff.$(OBJEXT)
-raw2tiff_OBJECTS = $(am_raw2tiff_OBJECTS)
-raw2tiff_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_rgb2ycbcr_OBJECTS = rgb2ycbcr.$(OBJEXT)
-rgb2ycbcr_OBJECTS = $(am_rgb2ycbcr_OBJECTS)
-rgb2ycbcr_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_thumbnail_OBJECTS = thumbnail.$(OBJEXT)
-thumbnail_OBJECTS = $(am_thumbnail_OBJECTS)
-thumbnail_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiff2bw_OBJECTS = tiff2bw.$(OBJEXT)
-tiff2bw_OBJECTS = $(am_tiff2bw_OBJECTS)
-tiff2bw_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiff2pdf_OBJECTS = tiff2pdf.$(OBJEXT)
-tiff2pdf_OBJECTS = $(am_tiff2pdf_OBJECTS)
-tiff2pdf_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiff2ps_OBJECTS = tiff2ps.$(OBJEXT)
-tiff2ps_OBJECTS = $(am_tiff2ps_OBJECTS)
-tiff2ps_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiff2rgba_OBJECTS = tiff2rgba.$(OBJEXT)
-tiff2rgba_OBJECTS = $(am_tiff2rgba_OBJECTS)
-tiff2rgba_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffcmp_OBJECTS = tiffcmp.$(OBJEXT)
-tiffcmp_OBJECTS = $(am_tiffcmp_OBJECTS)
-tiffcmp_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffcp_OBJECTS = tiffcp.$(OBJEXT)
-tiffcp_OBJECTS = $(am_tiffcp_OBJECTS)
-tiffcp_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffcrop_OBJECTS = tiffcrop.$(OBJEXT)
-tiffcrop_OBJECTS = $(am_tiffcrop_OBJECTS)
-tiffcrop_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffdither_OBJECTS = tiffdither.$(OBJEXT)
-tiffdither_OBJECTS = $(am_tiffdither_OBJECTS)
-tiffdither_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
 am_tiffdump_OBJECTS = tiffdump.$(OBJEXT)
 tiffdump_OBJECTS = $(am_tiffdump_OBJECTS)
 tiffdump_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffgt_OBJECTS = tiffgt-tiffgt.$(OBJEXT)
-tiffgt_OBJECTS = $(am_tiffgt_OBJECTS)
-am__DEPENDENCIES_1 =
-tiffgt_DEPENDENCIES = $(LIBTIFF) $(LIBPORT) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
-tiffgt_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(tiffgt_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_tiffinfo_OBJECTS = tiffinfo.$(OBJEXT)
 tiffinfo_OBJECTS = $(am_tiffinfo_OBJECTS)
 tiffinfo_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
-am_tiffmedian_OBJECTS = tiffmedian.$(OBJEXT)
-tiffmedian_OBJECTS = $(am_tiffmedian_OBJECTS)
-tiffmedian_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
 am_tiffset_OBJECTS = tiffset.$(OBJEXT)
 tiffset_OBJECTS = $(am_tiffset_OBJECTS)
 tiffset_DEPENDENCIES = $(LIBTIFF) $(LIBPORT)
@@ -224,19 +165,11 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/libtiff
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/config -I$(top_builddir)/libtiff -I$(top_builddir)/port
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/fax2ps.Po ./$(DEPDIR)/fax2tiff.Po \
-	./$(DEPDIR)/pal2rgb.Po ./$(DEPDIR)/ppm2tiff.Po \
-	./$(DEPDIR)/raw2tiff.Po ./$(DEPDIR)/rgb2ycbcr.Po \
-	./$(DEPDIR)/thumbnail.Po ./$(DEPDIR)/tiff2bw.Po \
-	./$(DEPDIR)/tiff2pdf.Po ./$(DEPDIR)/tiff2ps.Po \
-	./$(DEPDIR)/tiff2rgba.Po ./$(DEPDIR)/tiffcmp.Po \
-	./$(DEPDIR)/tiffcp.Po ./$(DEPDIR)/tiffcrop.Po \
-	./$(DEPDIR)/tiffdither.Po ./$(DEPDIR)/tiffdump.Po \
-	./$(DEPDIR)/tiffgt-tiffgt.Po ./$(DEPDIR)/tiffinfo.Po \
-	./$(DEPDIR)/tiffmedian.Po ./$(DEPDIR)/tiffset.Po \
+am__depfiles_remade = ./$(DEPDIR)/tiffcp.Po ./$(DEPDIR)/tiffdump.Po \
+	./$(DEPDIR)/tiffinfo.Po ./$(DEPDIR)/tiffset.Po \
 	./$(DEPDIR)/tiffsplit.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -257,21 +190,10 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(fax2ps_SOURCES) $(fax2tiff_SOURCES) $(pal2rgb_SOURCES) \
-	$(ppm2tiff_SOURCES) $(raw2tiff_SOURCES) $(rgb2ycbcr_SOURCES) \
-	$(thumbnail_SOURCES) $(tiff2bw_SOURCES) $(tiff2pdf_SOURCES) \
-	$(tiff2ps_SOURCES) $(tiff2rgba_SOURCES) $(tiffcmp_SOURCES) \
-	$(tiffcp_SOURCES) $(tiffcrop_SOURCES) $(tiffdither_SOURCES) \
-	$(tiffdump_SOURCES) $(tiffgt_SOURCES) $(tiffinfo_SOURCES) \
-	$(tiffmedian_SOURCES) $(tiffset_SOURCES) $(tiffsplit_SOURCES)
-DIST_SOURCES = $(fax2ps_SOURCES) $(fax2tiff_SOURCES) \
-	$(pal2rgb_SOURCES) $(ppm2tiff_SOURCES) $(raw2tiff_SOURCES) \
-	$(rgb2ycbcr_SOURCES) $(thumbnail_SOURCES) $(tiff2bw_SOURCES) \
-	$(tiff2pdf_SOURCES) $(tiff2ps_SOURCES) $(tiff2rgba_SOURCES) \
-	$(tiffcmp_SOURCES) $(tiffcp_SOURCES) $(tiffcrop_SOURCES) \
-	$(tiffdither_SOURCES) $(tiffdump_SOURCES) $(tiffgt_SOURCES) \
-	$(tiffinfo_SOURCES) $(tiffmedian_SOURCES) $(tiffset_SOURCES) \
-	$(tiffsplit_SOURCES)
+SOURCES = $(tiffcp_SOURCES) $(tiffdump_SOURCES) $(tiffinfo_SOURCES) \
+	$(tiffset_SOURCES) $(tiffsplit_SOURCES)
+DIST_SOURCES = $(tiffcp_SOURCES) $(tiffdump_SOURCES) \
+	$(tiffinfo_SOURCES) $(tiffset_SOURCES) $(tiffsplit_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -329,12 +251,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
-GLUT_CFLAGS = @GLUT_CFLAGS@
-GLUT_LIBS = @GLUT_LIBS@
-GLU_CFLAGS = @GLU_CFLAGS@
-GLU_LIBS = @GLU_LIBS@
-GL_CFLAGS = @GL_CFLAGS@
-GL_LIBS = @GL_LIBS@
 GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -377,20 +293,18 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PTHREAD_CC = @PTHREAD_CC@
-PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
-PTHREAD_LIBS = @PTHREAD_LIBS@
+PYTHON_BIN = @PYTHON_BIN@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SPHINX_BUILD = @SPHINX_BUILD@
 STRIP = @STRIP@
+TIFF_MAN1_GEN = @TIFF_MAN1_GEN@
+TIFF_MAN1_PREBUILT = @TIFF_MAN1_PREBUILT@
+TIFF_MAN3_GEN = @TIFF_MAN3_GEN@
+TIFF_MAN3_PREBUILT = @TIFF_MAN3_PREBUILT@
 VERSION = @VERSION@
-XMKMF = @XMKMF@
-X_CFLAGS = @X_CFLAGS@
-X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_LIBS = @X_LIBS@
-X_PRE_LIBS = @X_PRE_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -404,7 +318,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ax_pthread_config = @ax_pthread_config@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -437,12 +350,14 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 tiff_libs_private = @tiff_libs_private@
+tiff_requires_private = @tiff_requires_private@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -450,53 +365,20 @@ LIBPORT = $(top_builddir)/port/libport.la
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 EXTRA_DIST = \
 	CMakeLists.txt \
-	Makefile.vc
+	tif_tools_versioninfo.rc
 
 @HAVE_RPATH_TRUE@AM_LDFLAGS = $(LIBDIR)
-fax2ps_SOURCES = fax2ps.c
-fax2ps_LDADD = $(LIBTIFF) $(LIBPORT)
-fax2tiff_SOURCES = fax2tiff.c
-fax2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
-pal2rgb_SOURCES = pal2rgb.c
-pal2rgb_LDADD = $(LIBTIFF) $(LIBPORT)
-ppm2tiff_SOURCES = ppm2tiff.c
-ppm2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
-raw2tiff_SOURCES = raw2tiff.c
-raw2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
-rgb2ycbcr_SOURCES = rgb2ycbcr.c
-rgb2ycbcr_LDADD = $(LIBTIFF) $(LIBPORT)
-thumbnail_SOURCES = thumbnail.c
-thumbnail_LDADD = $(LIBTIFF) $(LIBPORT)
-tiff2bw_SOURCES = tiff2bw.c
-tiff2bw_LDADD = $(LIBTIFF) $(LIBPORT)
-tiff2pdf_SOURCES = tiff2pdf.c
-tiff2pdf_LDADD = $(LIBTIFF) $(LIBPORT)
-tiff2ps_SOURCES = tiff2ps.c
-tiff2ps_LDADD = $(LIBTIFF) $(LIBPORT)
-tiff2rgba_SOURCES = tiff2rgba.c
-tiff2rgba_LDADD = $(LIBTIFF) $(LIBPORT)
-tiffcmp_SOURCES = tiffcmp.c
-tiffcmp_LDADD = $(LIBTIFF) $(LIBPORT)
 tiffcp_SOURCES = tiffcp.c
 tiffcp_LDADD = $(LIBTIFF) $(LIBPORT)
-tiffcrop_SOURCES = tiffcrop.c
-tiffcrop_LDADD = $(LIBTIFF) $(LIBPORT)
-tiffdither_SOURCES = tiffdither.c
-tiffdither_LDADD = $(LIBTIFF) $(LIBPORT)
 tiffdump_SOURCES = tiffdump.c
 tiffdump_LDADD = $(LIBTIFF) $(LIBPORT)
 tiffinfo_SOURCES = tiffinfo.c
 tiffinfo_LDADD = $(LIBTIFF) $(LIBPORT)
-tiffmedian_SOURCES = tiffmedian.c
-tiffmedian_LDADD = $(LIBTIFF) $(LIBPORT)
 tiffset_SOURCES = tiffset.c
 tiffset_LDADD = $(LIBTIFF) $(LIBPORT)
 tiffsplit_SOURCES = tiffsplit.c
 tiffsplit_LDADD = $(LIBTIFF) $(LIBPORT)
-tiffgt_SOURCES = tiffgt.c
-tiffgt_CFLAGS = $(CFLAGS) $(GLUT_CFLAGS) $(AM_CFLAGS)
-tiffgt_LDADD = $(LIBTIFF) $(LIBPORT) $(X_LIBS) $(GLUT_LIBS)
-AM_CPPFLAGS = -I$(top_srcdir)/libtiff
+AM_CPPFLAGS = -I$(top_srcdir)/libtiff -I$(top_srcdir)/port
 all: all-am
 
 .SUFFIXES:
@@ -580,90 +462,17 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-clean-checkPROGRAMS:
-	@list='$(check_PROGRAMS)'; test -n "$$list" || exit 0; \
-	echo " rm -f" $$list; \
-	rm -f $$list || exit $$?; \
-	test -n "$(EXEEXT)" || exit 0; \
-	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
-	echo " rm -f" $$list; \
-	rm -f $$list
-
-fax2ps$(EXEEXT): $(fax2ps_OBJECTS) $(fax2ps_DEPENDENCIES) $(EXTRA_fax2ps_DEPENDENCIES) 
-	@rm -f fax2ps$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(fax2ps_OBJECTS) $(fax2ps_LDADD) $(LIBS)
-
-fax2tiff$(EXEEXT): $(fax2tiff_OBJECTS) $(fax2tiff_DEPENDENCIES) $(EXTRA_fax2tiff_DEPENDENCIES) 
-	@rm -f fax2tiff$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(fax2tiff_OBJECTS) $(fax2tiff_LDADD) $(LIBS)
-
-pal2rgb$(EXEEXT): $(pal2rgb_OBJECTS) $(pal2rgb_DEPENDENCIES) $(EXTRA_pal2rgb_DEPENDENCIES) 
-	@rm -f pal2rgb$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(pal2rgb_OBJECTS) $(pal2rgb_LDADD) $(LIBS)
-
-ppm2tiff$(EXEEXT): $(ppm2tiff_OBJECTS) $(ppm2tiff_DEPENDENCIES) $(EXTRA_ppm2tiff_DEPENDENCIES) 
-	@rm -f ppm2tiff$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(ppm2tiff_OBJECTS) $(ppm2tiff_LDADD) $(LIBS)
-
-raw2tiff$(EXEEXT): $(raw2tiff_OBJECTS) $(raw2tiff_DEPENDENCIES) $(EXTRA_raw2tiff_DEPENDENCIES) 
-	@rm -f raw2tiff$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(raw2tiff_OBJECTS) $(raw2tiff_LDADD) $(LIBS)
-
-rgb2ycbcr$(EXEEXT): $(rgb2ycbcr_OBJECTS) $(rgb2ycbcr_DEPENDENCIES) $(EXTRA_rgb2ycbcr_DEPENDENCIES) 
-	@rm -f rgb2ycbcr$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(rgb2ycbcr_OBJECTS) $(rgb2ycbcr_LDADD) $(LIBS)
-
-thumbnail$(EXEEXT): $(thumbnail_OBJECTS) $(thumbnail_DEPENDENCIES) $(EXTRA_thumbnail_DEPENDENCIES) 
-	@rm -f thumbnail$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(thumbnail_OBJECTS) $(thumbnail_LDADD) $(LIBS)
-
-tiff2bw$(EXEEXT): $(tiff2bw_OBJECTS) $(tiff2bw_DEPENDENCIES) $(EXTRA_tiff2bw_DEPENDENCIES) 
-	@rm -f tiff2bw$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiff2bw_OBJECTS) $(tiff2bw_LDADD) $(LIBS)
-
-tiff2pdf$(EXEEXT): $(tiff2pdf_OBJECTS) $(tiff2pdf_DEPENDENCIES) $(EXTRA_tiff2pdf_DEPENDENCIES) 
-	@rm -f tiff2pdf$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiff2pdf_OBJECTS) $(tiff2pdf_LDADD) $(LIBS)
-
-tiff2ps$(EXEEXT): $(tiff2ps_OBJECTS) $(tiff2ps_DEPENDENCIES) $(EXTRA_tiff2ps_DEPENDENCIES) 
-	@rm -f tiff2ps$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiff2ps_OBJECTS) $(tiff2ps_LDADD) $(LIBS)
-
-tiff2rgba$(EXEEXT): $(tiff2rgba_OBJECTS) $(tiff2rgba_DEPENDENCIES) $(EXTRA_tiff2rgba_DEPENDENCIES) 
-	@rm -f tiff2rgba$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiff2rgba_OBJECTS) $(tiff2rgba_LDADD) $(LIBS)
-
-tiffcmp$(EXEEXT): $(tiffcmp_OBJECTS) $(tiffcmp_DEPENDENCIES) $(EXTRA_tiffcmp_DEPENDENCIES) 
-	@rm -f tiffcmp$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiffcmp_OBJECTS) $(tiffcmp_LDADD) $(LIBS)
-
 tiffcp$(EXEEXT): $(tiffcp_OBJECTS) $(tiffcp_DEPENDENCIES) $(EXTRA_tiffcp_DEPENDENCIES) 
 	@rm -f tiffcp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(tiffcp_OBJECTS) $(tiffcp_LDADD) $(LIBS)
-
-tiffcrop$(EXEEXT): $(tiffcrop_OBJECTS) $(tiffcrop_DEPENDENCIES) $(EXTRA_tiffcrop_DEPENDENCIES) 
-	@rm -f tiffcrop$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiffcrop_OBJECTS) $(tiffcrop_LDADD) $(LIBS)
-
-tiffdither$(EXEEXT): $(tiffdither_OBJECTS) $(tiffdither_DEPENDENCIES) $(EXTRA_tiffdither_DEPENDENCIES) 
-	@rm -f tiffdither$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiffdither_OBJECTS) $(tiffdither_LDADD) $(LIBS)
 
 tiffdump$(EXEEXT): $(tiffdump_OBJECTS) $(tiffdump_DEPENDENCIES) $(EXTRA_tiffdump_DEPENDENCIES) 
 	@rm -f tiffdump$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(tiffdump_OBJECTS) $(tiffdump_LDADD) $(LIBS)
 
-tiffgt$(EXEEXT): $(tiffgt_OBJECTS) $(tiffgt_DEPENDENCIES) $(EXTRA_tiffgt_DEPENDENCIES) 
-	@rm -f tiffgt$(EXEEXT)
-	$(AM_V_CCLD)$(tiffgt_LINK) $(tiffgt_OBJECTS) $(tiffgt_LDADD) $(LIBS)
-
 tiffinfo$(EXEEXT): $(tiffinfo_OBJECTS) $(tiffinfo_DEPENDENCIES) $(EXTRA_tiffinfo_DEPENDENCIES) 
 	@rm -f tiffinfo$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(tiffinfo_OBJECTS) $(tiffinfo_LDADD) $(LIBS)
-
-tiffmedian$(EXEEXT): $(tiffmedian_OBJECTS) $(tiffmedian_DEPENDENCIES) $(EXTRA_tiffmedian_DEPENDENCIES) 
-	@rm -f tiffmedian$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiffmedian_OBJECTS) $(tiffmedian_LDADD) $(LIBS)
 
 tiffset$(EXEEXT): $(tiffset_OBJECTS) $(tiffset_DEPENDENCIES) $(EXTRA_tiffset_DEPENDENCIES) 
 	@rm -f tiffset$(EXEEXT)
@@ -679,25 +488,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fax2ps.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fax2tiff.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pal2rgb.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ppm2tiff.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/raw2tiff.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rgb2ycbcr.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/thumbnail.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiff2bw.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiff2pdf.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiff2ps.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiff2rgba.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffcmp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffcp.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffcrop.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffdither.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffdump.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffgt-tiffgt.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffinfo.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffmedian.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffset.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiffsplit.Po@am__quote@ # am--include-marker
 
@@ -727,20 +520,6 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
-
-tiffgt-tiffgt.o: tiffgt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tiffgt_CFLAGS) $(CFLAGS) -MT tiffgt-tiffgt.o -MD -MP -MF $(DEPDIR)/tiffgt-tiffgt.Tpo -c -o tiffgt-tiffgt.o `test -f 'tiffgt.c' || echo '$(srcdir)/'`tiffgt.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tiffgt-tiffgt.Tpo $(DEPDIR)/tiffgt-tiffgt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tiffgt.c' object='tiffgt-tiffgt.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tiffgt_CFLAGS) $(CFLAGS) -c -o tiffgt-tiffgt.o `test -f 'tiffgt.c' || echo '$(srcdir)/'`tiffgt.c
-
-tiffgt-tiffgt.obj: tiffgt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tiffgt_CFLAGS) $(CFLAGS) -MT tiffgt-tiffgt.obj -MD -MP -MF $(DEPDIR)/tiffgt-tiffgt.Tpo -c -o tiffgt-tiffgt.obj `if test -f 'tiffgt.c'; then $(CYGPATH_W) 'tiffgt.c'; else $(CYGPATH_W) '$(srcdir)/tiffgt.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tiffgt-tiffgt.Tpo $(DEPDIR)/tiffgt-tiffgt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tiffgt.c' object='tiffgt-tiffgt.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tiffgt_CFLAGS) $(CFLAGS) -c -o tiffgt-tiffgt.obj `if test -f 'tiffgt.c'; then $(CYGPATH_W) 'tiffgt.c'; else $(CYGPATH_W) '$(srcdir)/tiffgt.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -834,7 +613,6 @@ distdir-am: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 check: check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
@@ -873,29 +651,12 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
-	clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/fax2ps.Po
-	-rm -f ./$(DEPDIR)/fax2tiff.Po
-	-rm -f ./$(DEPDIR)/pal2rgb.Po
-	-rm -f ./$(DEPDIR)/ppm2tiff.Po
-	-rm -f ./$(DEPDIR)/raw2tiff.Po
-	-rm -f ./$(DEPDIR)/rgb2ycbcr.Po
-	-rm -f ./$(DEPDIR)/thumbnail.Po
-	-rm -f ./$(DEPDIR)/tiff2bw.Po
-	-rm -f ./$(DEPDIR)/tiff2pdf.Po
-	-rm -f ./$(DEPDIR)/tiff2ps.Po
-	-rm -f ./$(DEPDIR)/tiff2rgba.Po
-	-rm -f ./$(DEPDIR)/tiffcmp.Po
-	-rm -f ./$(DEPDIR)/tiffcp.Po
-	-rm -f ./$(DEPDIR)/tiffcrop.Po
-	-rm -f ./$(DEPDIR)/tiffdither.Po
+		-rm -f ./$(DEPDIR)/tiffcp.Po
 	-rm -f ./$(DEPDIR)/tiffdump.Po
-	-rm -f ./$(DEPDIR)/tiffgt-tiffgt.Po
 	-rm -f ./$(DEPDIR)/tiffinfo.Po
-	-rm -f ./$(DEPDIR)/tiffmedian.Po
 	-rm -f ./$(DEPDIR)/tiffset.Po
 	-rm -f ./$(DEPDIR)/tiffsplit.Po
 	-rm -f Makefile
@@ -943,25 +704,9 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/fax2ps.Po
-	-rm -f ./$(DEPDIR)/fax2tiff.Po
-	-rm -f ./$(DEPDIR)/pal2rgb.Po
-	-rm -f ./$(DEPDIR)/ppm2tiff.Po
-	-rm -f ./$(DEPDIR)/raw2tiff.Po
-	-rm -f ./$(DEPDIR)/rgb2ycbcr.Po
-	-rm -f ./$(DEPDIR)/thumbnail.Po
-	-rm -f ./$(DEPDIR)/tiff2bw.Po
-	-rm -f ./$(DEPDIR)/tiff2pdf.Po
-	-rm -f ./$(DEPDIR)/tiff2ps.Po
-	-rm -f ./$(DEPDIR)/tiff2rgba.Po
-	-rm -f ./$(DEPDIR)/tiffcmp.Po
-	-rm -f ./$(DEPDIR)/tiffcp.Po
-	-rm -f ./$(DEPDIR)/tiffcrop.Po
-	-rm -f ./$(DEPDIR)/tiffdither.Po
+		-rm -f ./$(DEPDIR)/tiffcp.Po
 	-rm -f ./$(DEPDIR)/tiffdump.Po
-	-rm -f ./$(DEPDIR)/tiffgt-tiffgt.Po
 	-rm -f ./$(DEPDIR)/tiffinfo.Po
-	-rm -f ./$(DEPDIR)/tiffmedian.Po
 	-rm -f ./$(DEPDIR)/tiffset.Po
 	-rm -f ./$(DEPDIR)/tiffsplit.Po
 	-rm -f Makefile
@@ -982,19 +727,18 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: check-am install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
-	clean-libtool cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	clean-binPROGRAMS clean-generic clean-libtool cscopelist-am \
+	ctags ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
@@ -1004,10 +748,6 @@ uninstall-am: uninstall-binPROGRAMS
 
 echo:
 	(echo $(CFLAGS))
-	(echo $(tiffgt_CFLAGS))
-	(echo $(GL_CFLAGS))
-	(echo $(GLU_CFLAGS))
-	(echo $(GLUT_CFLAGS))
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

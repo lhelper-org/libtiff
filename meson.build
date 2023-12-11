@@ -1,148 +1,135 @@
-project('libtiff4', 'c')
+project(
+  'tiff',
+  'c',
+  version: files('VERSION'),
+  meson_version: '>=0.57.0',
+)
+# calculate library version from configure.ac values
+libtiff_current = 6
+libtiff_revision = 2
+libtiff_age = 0
+library_version = '@0@.@1@.@2@'.format(
+    libtiff_current - libtiff_age,
+    libtiff_age,
+    libtiff_revision
+)
 
-pkg = import('pkgconfig')
+cc = meson.get_compiler('c')
+m_dep = cc.find_library('m', required: false)
+jbig_dep = cc.find_library('jbig', required: get_option('jbig'))
+jpeg_dep = dependency('libjpeg', required: get_option('jpeg'))
+lerc_dep = dependency('liblerc', required: get_option('lerc'))
+lzma_dep = dependency('liblzma', required: get_option('lzma'))
+webp_dep = dependency('libwebp', required: get_option('webp'))
+zlib_dep = dependency('zlib', required: get_option('zlib'))
+zstd_dep = dependency('libzstd', required: get_option('zstd'))
 
 cdata = configuration_data()
-cc = meson.get_compiler('c')
-is_64 = cc.sizeof('void*') == 8
 
-if cc.get_id() == 'msvc'
-  cdata.set('TIFF_INT8_T', '__int8')
-  cdata.set('TIFF_UINT8_T', 'unsigned __int8')
-  cdata.set('TIFF_INT16_T', '__int16')
-  cdata.set('TIFF_UINT16_T', 'unsigned __int16')
-  cdata.set('TIFF_INT32_T', '__int32')
-  cdata.set('TIFF_UINT32_T', 'unsigned __int32')
-  cdata.set('TIFF_INT64_T', '__int64')
-  cdata.set('TIFF_UINT64_T', 'unsigned __int64')
-  cdata.set('TIFF_UINT64_FORMAT', '"%U64d"')
-  if is_64
-    cdata.set('TIFF_SSIZE_T', '__int64')
-    cdata.set('TIFF_SSIZE_FORMAT', '"%I64d"')
-  else
-    cdata.set('TIFF_SSIZE_T', '__int32')
-    cdata.set('TIFF_SSIZE_FORMAT', '"%d"')
-  endif
-else
-  # Detect type size assuming 8-bit chars
-  cdata.set('TIFF_INT8_T', 'char')
-  cdata.set('TIFF_UINT8_T', 'unsigned char')
-
-  compiler_sizeofs = {
-    'short'    : [cc.sizeof('short')    ,'h' ],
-    'int'      : [cc.sizeof('int')      ,''  ],
-    'long'     : [cc.sizeof('long')     ,'l' ],
-    'long long': [cc.sizeof('long long'),'ll'],
-  }
-  signed_tiff_types_sizes = {
-    'TIFF_INT16' : 2,
-    'TIFF_INT32' : 4,
-    'TIFF_INT64' : 8,
-    'TIFF_SSIZE' : cc.sizeof('void*'),
-  }
-  unsigned_tiff_types_sizes = {
-    'TIFF_UINT16' : 2,
-    'TIFF_UINT32' : 4,
-    'TIFF_UINT64' : 8,
-  }
-
-  foreach tiff_type, target_size: signed_tiff_types_sizes
-    foreach type_name, infos: compiler_sizeofs
-      type_size   = infos[0]
-      type_printf = infos[1]
-      if type_size == target_size
-        cdata.set(tiff_type+'_T',type_name)
-        cdata.set(tiff_type+'_FORMAT', '"%'+type_printf+'d"')
-        break
-      endif
-    endforeach
-  endforeach
-
-  foreach tiff_type, target_size: unsigned_tiff_types_sizes
-    foreach type_name, infos: compiler_sizeofs
-      type_size   = infos[0]
-      type_printf = infos[1]
-      if type_size == target_size
-        cdata.set(tiff_type+'_T','unsigned '+type_name)
-        cdata.set(tiff_type+'_FORMAT', '"%'+type_printf+'ud"')
-        break
-      endif
-    endforeach
-  endforeach
+cdata.set10('HOST_BIG_ENDIAN', host_machine.endian() == 'big')
+if host_machine.endian() == 'big'
+  # missing cmakedefine in tif_config.h.cmake.in.  this is how upstream
+  # handles it in cmake/ProcessorChecks.cmake
+  add_project_arguments('-DWORDS_BIGENDIAN', language : 'c')
 endif
 
+cdata.set('TIFF_INT8_T', 'int8_t')
+cdata.set('TIFF_UINT8_T', 'uint8_t')
+cdata.set('TIFF_INT16_T', 'int16_t')
+cdata.set('TIFF_UINT16_T', 'uint16_t')
+cdata.set('TIFF_INT32_T', 'int32_t')
+cdata.set('TIFF_UINT32_T', 'uint32_t')
+cdata.set('TIFF_INT64_T', 'int64_t')
+cdata.set('TIFF_UINT64_T', 'uint64_t')
+cdata.set('TIFF_SSIZE_T', cc.sizeof('void*') == 8 ? 'int64_t' : 'int32_t')
+cdata.set('SIZEOF_SIZE_T', cc.sizeof('size_t'))
+
 check_headers = [
-  ['HAVE_ASSERT_H', 'assert.h'],
-  ['HAVE_DLFCN_H', 'dlfcn.h'],
-  ['HAVE_FCNTL_H', 'fcntl.h'],
-  ['HAVE_GLUT_GLUT_H', 'glut/glut.h'],
-  ['HAVE_GL_GLUT_H', 'gl/glut.h'],
-  ['HAVE_GL_GLU_H', 'gl/glu.h'],
-  ['HAVE_GL_GL_H', 'gl/gl.h'],
-  ['HAVE_INTTYPES_H', 'inttypes.h'],
-  ['HAVE_IO_H', 'io.h'],
-  ['HAVE_MEMORY_H', 'memory.h'],
-  ['HAVE_OPENGL_GLU_H', 'opengl/glu.h'],
-  ['HAVE_OPENGL_GL_H', 'opengl/gl.h'],
-  ['HAVE_SEARCH_H', 'search.h'],
-  ['HAVE_STDINT_H', 'stdint.h'],
-  ['HAVE_STDLIB_H', 'stdlib.h'],
-  ['HAVE_STRINGS_H', 'strings.h'],
-  ['HAVE_STRING_H', 'string.h'],
-  ['HAVE_SYS_STAT_H', 'sys/stat.h'],
-  ['HAVE_SYS_TYPES_H', 'sys/types.h'],
-  ['HAVE_UNISTD_H', 'unistd.h'],
-  ['HAVE_WINDOWS_H', 'windows.h'],
+  'assert.h',
+  'fcntl.h',
+  'GLUT/glut.h',
+  'io.h',
+  'GL/glut.h',
+  'GL/glu.h',
+  'GL/gl.h',
+  'OpenGL/glu.h',
+  'OpenGL/gl.h',
+  'strings.h',
+  'sys/types.h',
+  'unistd.h',
 ]
 
 foreach h : check_headers
-  if cc.has_header(h.get(1))
-    cdata.set(h.get(0), 1)
+  if cc.has_header(h)
+    cdata.set('HAVE_@0@'.format(h.underscorify().to_upper()), 1)
   endif
 endforeach
 
-check_functions = [
-# check token ['HAVE_DECL_OPTARG']
-  ['HAVE_FSEEKO', 'fseeko', '#include<stdio.h>'],
-# check token ['HAVE_GETOPT']
-# check token ['HAVE_IEEEFP']
-# check token ['HAVE_JBG_NEWLEN']
-# check token ['HAVE_LFIND']
-  ['HAVE_MMAP', 'mmap', '#include<sys/mman.h>'],
-# check token ['HAVE_PTHREAD']
-# check token ['HAVE_SETMODE']
-  ['HAVE_SNPRINTF', 'snprintf', '#include<stdio.h>'],
-  ['HAVE_STRCASECMP', 'strcasecmp', '#include<strings.h>'],
-  ['HAVE_STRTOL', 'strtol', '#include<stdlib.h>'],
-  ['HAVE_STRTOLL', 'strtoll', '#include<stdlib.h>'],
-  ['HAVE_STRTOUL', 'strtoul', '#include<stdlib.h>'],
-  ['HAVE_STRTOULL', 'strtoull', '#include<stdlib.h>'],
-# check token ['HAVE_VARARGS_GLU_TESSCB']
-]
-
-foreach f : check_functions
-  if cc.has_function(f.get(1), prefix : f.get(2))
-    cdata.set(f.get(0), 1)
+foreach f : ['fseeko', 'mmap', 'setmode']
+  if cc.has_function(f)
+    cdata.set('HAVE_@0@'.format(f.underscorify().to_upper()), 1)
   endif
 endforeach
 
-cdata.set('SIZEOF_SIGNED_INT', cc.sizeof('signed int'))
-cdata.set('SIZEOF_SIGNED_LONG', cc.sizeof('signed long'))
-cdata.set('SIZEOF_SIGNED_LONG_LONG', cc.sizeof('signed long long'))
-cdata.set('SIZEOF_SIZE_T', cc.sizeof('size_t'))
-cdata.set('SIZEOF_UNSIGNED_CHAR_P', cc.sizeof('unsigned char*'))
-cdata.set('SIZEOF_UNSIGNED_INT', cc.sizeof('unsigned int'))
-cdata.set('SIZEOF_UNSIGNED_LONG', cc.sizeof('unsigned long'))
-cdata.set('SIZEOF_UNSIGNED_LONG_LONG', cc.sizeof('unsigned long long'))
+cdata.set('HAVE_JBG_NEWLEN', jbig_dep.found())
+cdata.set10('HAVE_DECL_OPTARG', cc.has_header_symbol('unistd.h', 'optarg'))
+cdata.set10('HAVE_GETOPT', cc.has_header_symbol('getopt.h', 'getopt'))
 
-cdata.set('HOST_FILLORDER', 'FILLORDER_LSB2MSB')
-cdata.set('HAVE_IEEEFP', 1)
-cdata.set('LZW_SUPPORT', 1)
+cdata.set('PACKAGE_BUGREPORT', 'tiff@lists.osgeo.org')
+cdata.set('PACKAGE_NAME', 'LibTIFF Software')
+cdata.set('PACKAGE_TARNAME', meson.project_name())
+cdata.set('PACKAGE_URL', 'https://gitlab.com/libtiff/libtiff')
+
+cdata.set('LIBTIFF_VERSION', meson.project_version())
+cdata.set('LIBTIFF_MAJOR_VERSION', meson.project_version().split('.')[0])
+cdata.set('LIBTIFF_MINOR_VERSION', meson.project_version().split('.')[1])
+cdata.set('LIBTIFF_MICRO_VERSION', meson.project_version().split('.')[2])
+cdata.set('LIBTIFF_RELEASE_DATE', import('fs').read('RELEASE-DATE').strip())
+
+cdata.set('CCITT_SUPPORT', true)
+cdata.set('PACKBITS_SUPPORT', true)
+cdata.set('LZW_SUPPORT', true)
+cdata.set('THUNDER_SUPPORT', true)
+cdata.set('NEXT_SUPPORT', true)
+cdata.set('LOGLUV_SUPPORT', true)
+cdata.set10('MDI_SUPPORT', true)
+cdata.set10('SUBIFD_SUPPORT', true)
+cdata.set('CXX_SUPPORT', false)
+cdata.set('CHUNKY_STRIP_READ_SUPPORT', false)
+
+cdata.set('LIBJPEG_12_PATH', '')
+cdata.set('STRIPCHOP_DEFAULT', 'TIFF_STRIPCHOP')
+cdata.set('DEFAULT_EXTRASAMPLE_AS_ALPHA', true)
+cdata.set('HAVE_IEEEFP', true)
+cdata.set('STRIP_SIZE_DEFAULT', 8192)
+
+cdata.set('JBIG_SUPPORT', jbig_dep.found())
+cdata.set('JPEG_SUPPORT', jpeg_dep.found())
+cdata.set('LERC_SUPPORT', lerc_dep.found())
+cdata.set('LZMA_SUPPORT', lzma_dep.found())
+cdata.set('WEBP_SUPPORT', webp_dep.found())
+cdata.set('ZSTD_SUPPORT', zstd_dep.found())
+cdata.set('ZIP_SUPPORT', zlib_dep.found())
+cdata.set('PIXARLOG_SUPPORT', zlib_dep.found())
+
+cdata.set('CHECK_JPEG_YCBCR_SUBSAMPLING', true)
+cdata.set('TIFF_MAX_DIR_COUNT', 1048576)
+
+# example variable in tiffconf.h.cmake.in comment
+cdata.set('VAR', 'VAR')
 
 subdir('libtiff')
 
-pkg.generate(tiff4_lib,
-    filebase : 'libtiff-4',
-    name : 'libtiff',
-    description : 'Tag Image File Format (TIFF) library.',
+libtiff4_dep = declare_dependency(
+  include_directories: 'libtiff',
+  link_with: tiff4_lib,
 )
+
+import('pkgconfig').generate(
+  tiff4_lib,
+  filebase: 'libtiff-4',
+  name: 'libtiff',
+  description: 'Tag Image File Format (TIFF) library.',
+)
+
+subdir('test')
